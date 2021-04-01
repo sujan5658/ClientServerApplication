@@ -57,6 +57,7 @@ public class ClientService extends Thread {
             this.objectOut.writeObject(this.client);
             String msg = "";
             boolean isAlert=false;
+            Runtime runTime = Runtime.getRuntime();
             while(mysocket.isConnected()){
                 msg = this.dataIn.readUTF().toString();
                 switch(msg){
@@ -64,10 +65,21 @@ public class ClientService extends Thread {
                         this.clientGUI.setDisconnectedMessage();
                         msg = "From Server : Server Stopped. Connection loss.!!!";
                         break;
-                    case "shutdown":
+                    case "#shutdown@yourself#":
                         this.mysocket.close();
-                        Runtime runTime = Runtime.getRuntime();
-                        runTime.exec("shutdown -s -t 0");
+                        //This code is for window
+                        //runTime.exec("shutdown -s -t 0");
+                        //This code is for linux and mac.
+                        runTime.exec("shutdown -h now");
+                        break;
+                    case "#logoff@yourself#":
+                        this.mysocket.close();
+                        //This code is for window
+                        //runTime.exec("shutdown -L");
+                        //This code is for linux and mac
+                        runTime.exec("osascript -e 'tell app \"System Events\" to  «event aevtrlgo»'");
+                        //If above code doesnot work for mac you can try this also.
+                        //runTime.exec("osascript -e 'tell app \"System Events\" to log out'");
                         break;
                     default:
                         if(msg.charAt(0)=='A'){

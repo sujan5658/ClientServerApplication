@@ -555,14 +555,16 @@ public class ClientGUI extends javax.swing.JFrame {
     public void setServerMessageInMessageBox(boolean isAlert,String message){
         txtMessageFromServer.setText(txtMessageFromServer.getText()+"\n"+message);
         if(isAlert){
-            String command = "PowerShell -Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('"+message+"')\"";
-            Runtime runTime = Runtime.getRuntime();
-            try {
-                runTime.exec(command);
-            } catch (IOException ex) {
-                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //JOptionPane.showMessageDialog(null,message,"Alert Message",JOptionPane.OK_OPTION);
+            //This is windows OS level command for popup box;
+            //String command = "PowerShell -Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('"+message+"')\"";
+//            Runtime runTime = Runtime.getRuntime();
+//            try {
+//                runTime.exec(command);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            //This is java popupbox
+            JOptionPane.showMessageDialog(null,message,"Alert Message",JOptionPane.OK_OPTION);
         }
     }
     //user defined methods ends

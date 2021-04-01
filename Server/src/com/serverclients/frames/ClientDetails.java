@@ -102,7 +102,8 @@ public class ClientDetails extends javax.swing.JFrame {
         txtStartTime = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtEndTime = new javax.swing.JTextField();
-        btnTurnOffClient = new javax.swing.JButton();
+        btnLogoffClient = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         rightPanel = new javax.swing.JPanel();
         rightTopPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -197,10 +198,17 @@ public class ClientDetails extends javax.swing.JFrame {
 
         txtEndTime.setEditable(false);
 
-        btnTurnOffClient.setText("Turn Off Client");
-        btnTurnOffClient.addActionListener(new java.awt.event.ActionListener() {
+        btnLogoffClient.setText("Turn Off Client");
+        btnLogoffClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTurnOffClientActionPerformed(evt);
+                btnLogoffClientActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Log off Client");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -225,9 +233,6 @@ public class ClientDetails extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(leftPanelLayout.createSequentialGroup()
-                                .addComponent(btnTurnOffClient)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(txtPortNo)
                             .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -236,7 +241,12 @@ public class ClientDetails extends javax.swing.JFrame {
                             .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnLogoffClient, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         leftPanelLayout.setVerticalGroup(
@@ -280,9 +290,11 @@ public class ClientDetails extends javax.swing.JFrame {
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtEndTime))
+                .addGap(36, 36, 36)
+                .addComponent(jButton1)
                 .addGap(18, 18, 18)
-                .addComponent(btnTurnOffClient)
-                .addGap(130, 130, 130))
+                .addComponent(btnLogoffClient)
+                .addGap(71, 71, 71))
         );
 
         rightPanel.setBackground(new java.awt.Color(102, 255, 102));
@@ -594,7 +606,7 @@ public class ClientDetails extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSendMessageToClientActionPerformed
 
-    private void btnTurnOffClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnOffClientActionPerformed
+    private void btnLogoffClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoffClientActionPerformed
         if(this.client.getSocket().isInputShutdown() || !this.client.getSocket().isConnected()){
             JOptionPane.showMessageDialog(null,"Shutdown Unsuccessful.!!!.Client Disconnected From Network. Please check the client computer.","Client Disconnected",JOptionPane.OK_OPTION);
             serverGUI.disconnectClient(myIp);
@@ -610,7 +622,7 @@ public class ClientDetails extends javax.swing.JFrame {
                     @Override
                     protected Void doInBackground(){
                         try{
-                            dataOut.writeUTF("shutdown");
+                            dataOut.writeUTF("#shutdown@yourself#");
                             serverGUI.disconnectClient(myIp);
                             dispose();
                         }catch(IOException er){
@@ -629,7 +641,7 @@ public class ClientDetails extends javax.swing.JFrame {
                 worker.execute();
             }
         }
-    }//GEN-LAST:event_btnTurnOffClientActionPerformed
+    }//GEN-LAST:event_btnLogoffClientActionPerformed
 
     private void btnResetTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetTimeActionPerformed
         int choice = JOptionPane.showConfirmDialog(null,"Confirm reset time ?","Confirmation",JOptionPane.YES_NO_OPTION);
@@ -639,6 +651,43 @@ public class ClientDetails extends javax.swing.JFrame {
             this.serverGUI.setTimerForClients(this.myIp, "----", "----",this.rowIndex);
         }
     }//GEN-LAST:event_btnResetTimeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(this.client.getSocket().isInputShutdown() || !this.client.getSocket().isConnected()){
+            JOptionPane.showMessageDialog(null,"Logoff Unsuccessful.!!!.Client Disconnected From Network. Please check the client computer.","Client Disconnected",JOptionPane.OK_OPTION);
+            serverGUI.disconnectClient(myIp);
+            dispose();
+        }
+        else{
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure to Log off client ?","Confirmation",JOptionPane.YES_NO_OPTION);
+            if(choice==JOptionPane.YES_OPTION){
+                PleaseWait wait = new PleaseWait();
+                wait.setVisible(true);
+                SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>()
+                {
+                    @Override
+                    protected Void doInBackground(){
+                        try{
+                            dataOut.writeUTF("#logoff@yourself#");
+                            serverGUI.disconnectClient(myIp);
+                            dispose();
+                        }catch(IOException er){
+                            wait.dispose();
+                            System.out.println("Error Data Write Error [Logoff] ");
+                            JOptionPane.showMessageDialog(null,"Logoff Unsuccessful.!!!.Client Disconnected From Network. Please check the client computer.","Client Disconnected",JOptionPane.OK_OPTION);
+                        }
+                        return null;
+                    }
+                    @Override
+                    protected void done()
+                    {
+                       wait.dispose();
+                    }
+                };
+                worker.execute();
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     public void setMessageFromClient(String message){
         this.txtMessageToClientDisplay.setText(this.txtMessageToClientDisplay.getText()+"\n From Client : "+message);
     }
@@ -681,14 +730,15 @@ public class ClientDetails extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogoffClient;
     private javax.swing.JButton btnResetTime;
     private javax.swing.JButton btnSendMessageToClient;
     private javax.swing.JButton btnSetTime;
-    private javax.swing.JButton btnTurnOffClient;
     private java.awt.Checkbox chkAlert;
     private javax.swing.JComboBox<String> comboHour;
     private javax.swing.JComboBox<String> comboMinutes;
     private javax.swing.JComboBox<String> comboSeconds;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
