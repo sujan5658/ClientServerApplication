@@ -86,7 +86,6 @@ public class ClientDetails extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
-        lvlSetTurnOffTime = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtClientIpAddress = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -108,24 +107,16 @@ public class ClientDetails extends javax.swing.JFrame {
         btnLogoffClient = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
+        rightPanel = new javax.swing.JPanel();
+        rightTopPanel = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        txtCurrentTime = new javax.swing.JTextField();
+        lvlSetTurnOffTime = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         turnOffMinutes = new javax.swing.JComboBox<>();
         btnTurnOff = new javax.swing.JButton();
-        lvlTurnOffTime = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        rightPanel = new javax.swing.JPanel();
-        rightTopPanel = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        comboHour = new javax.swing.JComboBox<>();
-        jLabel13 = new javax.swing.JLabel();
-        comboMinutes = new javax.swing.JComboBox<>();
-        jLabel14 = new javax.swing.JLabel();
-        comboSeconds = new javax.swing.JComboBox<>();
-        btnSetTime = new javax.swing.JButton();
-        jLabel17 = new javax.swing.JLabel();
-        txtCurrentTime = new javax.swing.JTextField();
-        btnResetTime = new javax.swing.JButton();
+        lvlTurnOffTime = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -140,13 +131,6 @@ public class ClientDetails extends javax.swing.JFrame {
         setResizable(false);
 
         leftPanel.setBackground(new java.awt.Color(0, 153, 0));
-
-        lvlSetTurnOffTime.setBackground(new java.awt.Color(51, 0, 102));
-        lvlSetTurnOffTime.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
-        lvlSetTurnOffTime.setForeground(new java.awt.Color(255, 255, 255));
-        lvlSetTurnOffTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lvlSetTurnOffTime.setText("set turn off Time after Idle");
-        lvlSetTurnOffTime.setOpaque(true);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -228,92 +212,41 @@ public class ClientDetails extends javax.swing.JFrame {
         jLabel18.setText("Client Details");
         jLabel18.setOpaque(true);
 
-        jLabel19.setBackground(new java.awt.Color(0, 153, 0));
-        jLabel19.setFont(new java.awt.Font("Times New Roman", 1, 15)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Minutes");
-        jLabel19.setOpaque(true);
-
-        turnOffMinutes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-        turnOffMinutes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                turnOffMinutesActionPerformed(evt);
-            }
-        });
-
-        btnTurnOff.setText("Set Time");
-        btnTurnOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTurnOffActionPerformed(evt);
-            }
-        });
-
-        lvlTurnOffTime.setBackground(new java.awt.Color(0, 153, 0));
-        lvlTurnOffTime.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lvlTurnOffTime.setForeground(new java.awt.Color(255, 255, 255));
-        lvlTurnOffTime.setText("10 min");
-        lvlTurnOffTime.setOpaque(true);
-
-        jLabel21.setBackground(new java.awt.Color(0, 153, 0));
-        jLabel21.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel21.setText("After Idle, client turn off time :");
-        jLabel21.setOpaque(true);
-
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(leftPanelLayout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lvlSetTurnOffTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(leftPanelLayout.createSequentialGroup()
-                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(txtPortNo)
-                                    .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
-                                .addComponent(btnLogoffClient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addComponent(turnOffMinutes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(35, 35, 35)
-                        .addComponent(btnTurnOff, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(txtPortNo)
+                            .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(leftPanelLayout.createSequentialGroup()
+                        .addComponent(btnLogoffClient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(leftPanelLayout.createSequentialGroup()
-                    .addGap(20, 20, 20)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(111, Short.MAX_VALUE)))
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,130 +289,111 @@ public class ClientDetails extends javax.swing.JFrame {
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtEndTime))
-                .addGap(26, 26, 26)
+                .addGap(63, 63, 63)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(btnLogoffClient))
-                .addGap(18, 18, 18)
-                .addComponent(lvlSetTurnOffTime)
-                .addGap(18, 18, 18)
-                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(turnOffMinutes, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnTurnOff, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(8, 8, 8)
-                .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
-                    .addContainerGap(488, Short.MAX_VALUE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+                    .addComponent(btnLogoffClient)
+                    .addComponent(jButton1))
+                .addGap(109, 109, 109))
         );
 
         rightPanel.setBackground(new java.awt.Color(102, 255, 102));
 
         rightTopPanel.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel11.setBackground(new java.awt.Color(51, 0, 102));
-        jLabel11.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Set Time For Client");
-        jLabel11.setOpaque(true);
-
-        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel12.setText("Hour");
-
-        comboHour.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
-
-        jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel13.setText("Minutes");
-
-        comboMinutes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-
-        jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel14.setText("Seconds");
-
-        comboSeconds.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-
-        btnSetTime.setText("Set Time");
-        btnSetTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSetTimeActionPerformed(evt);
-            }
-        });
-
         jLabel17.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel17.setText("Current Time : ");
 
         txtCurrentTime.setEditable(false);
-
-        btnResetTime.setText("Reset");
-        btnResetTime.addActionListener(new java.awt.event.ActionListener() {
+        txtCurrentTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetTimeActionPerformed(evt);
+                txtCurrentTimeActionPerformed(evt);
             }
         });
+
+        lvlSetTurnOffTime.setBackground(new java.awt.Color(51, 0, 102));
+        lvlSetTurnOffTime.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
+        lvlSetTurnOffTime.setForeground(new java.awt.Color(255, 255, 255));
+        lvlSetTurnOffTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lvlSetTurnOffTime.setText("set turn off Time after Idle");
+        lvlSetTurnOffTime.setOpaque(true);
+
+        jLabel19.setBackground(new java.awt.Color(204, 255, 204));
+        jLabel19.setFont(new java.awt.Font("Times New Roman", 1, 15)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(0, 0, 51));
+        jLabel19.setText("Minutes");
+        jLabel19.setOpaque(true);
+
+        turnOffMinutes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        turnOffMinutes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                turnOffMinutesActionPerformed(evt);
+            }
+        });
+
+        btnTurnOff.setText("Set Time");
+        btnTurnOff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTurnOffActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setBackground(new java.awt.Color(204, 255, 204));
+        jLabel21.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(0, 51, 51));
+        jLabel21.setText("After Idle, client turn off time :");
+        jLabel21.setOpaque(true);
+
+        lvlTurnOffTime.setBackground(new java.awt.Color(204, 255, 204));
+        lvlTurnOffTime.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lvlTurnOffTime.setForeground(new java.awt.Color(0, 51, 51));
+        lvlTurnOffTime.setText("10 min");
+        lvlTurnOffTime.setOpaque(true);
 
         javax.swing.GroupLayout rightTopPanelLayout = new javax.swing.GroupLayout(rightTopPanel);
         rightTopPanel.setLayout(rightTopPanelLayout);
         rightTopPanelLayout.setHorizontalGroup(
             rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightTopPanelLayout.createSequentialGroup()
-                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(lvlSetTurnOffTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(rightTopPanelLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rightTopPanelLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel17)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCurrentTime))
+                        .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(rightTopPanelLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(rightTopPanelLayout.createSequentialGroup()
-                                .addComponent(btnSetTime, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnResetTime, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(rightTopPanelLayout.createSequentialGroup()
-                                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboHour, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(comboMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel14)
-                                    .addComponent(comboSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(91, 91, 91))
+                        .addComponent(jLabel17)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCurrentTime, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                        .addGap(54, 54, 54))
+                    .addGroup(rightTopPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(turnOffMinutes, 0, 78, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTurnOff, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41))))
         );
         rightTopPanelLayout.setVerticalGroup(
             rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rightTopPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel11)
+                .addComponent(lvlSetTurnOffTime)
                 .addGap(18, 18, 18)
                 .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(turnOffMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTurnOff, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSetTime, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(btnResetTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25)
-                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(txtCurrentTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGroup(rightTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtCurrentTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
@@ -599,65 +513,6 @@ public class ClientDetails extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtConnectedTimeActionPerformed
 
-    private void btnSetTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetTimeActionPerformed
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String currentTime = dtf.format(now);
-        String [] time = currentTime.split(":");
-        int hour = Integer.parseInt(time[0]);
-        int minutes = Integer.parseInt(time[1]);
-        int seconds = Integer.parseInt(time[2]);
-        
-        int txtHour = Integer.parseInt(comboHour.getSelectedItem().toString());
-        int txtMinutes = Integer.parseInt(comboMinutes.getSelectedItem().toString());
-        int txtSeconds = Integer.parseInt(comboSeconds.getSelectedItem().toString());
-        
-        if((txtSeconds+seconds)>60){
-            txtSeconds = (txtSeconds+seconds)%60;
-            txtMinutes+=1;
-        }
-        else{
-            txtSeconds = (txtSeconds+seconds);
-        }
-        if((txtMinutes+minutes)>60){
-            txtMinutes = (txtMinutes+minutes)%60;
-            txtHour+=1;
-        }
-        else{
-            txtMinutes = (txtMinutes+minutes);
-        }
-        if((txtHour+hour)>12){
-            txtHour = (txtHour+hour)%12;
-        }
-        else{
-            txtHour = (txtHour+hour);
-        }
-        String h,m,s;
-        if(txtHour<10){
-            h = "0"+txtHour;
-        }
-        else{
-            h = Integer.toString(txtHour);
-        }
-        if(txtMinutes<10){
-            m = "0"+txtMinutes;
-        }
-        else{
-            m = Integer.toString(txtMinutes);
-        }
-        if(txtSeconds<10){
-            s = "0"+txtHour;
-        }
-        else{
-            s = Integer.toString(txtSeconds);
-        }
-        String endTime = h+":"+m+":"+s;
-        
-        txtStartTime.setText(currentTime);
-        txtEndTime.setText(endTime);
-        this.serverGUI.setTimerForClients(this.myIp, currentTime, endTime,this.rowIndex);
-    }//GEN-LAST:event_btnSetTimeActionPerformed
-
     private void btnSendMessageToClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessageToClientActionPerformed
         String msg = txtMessageToClient.getText();
         if(msg.equals("") || msg==null){
@@ -724,15 +579,6 @@ public class ClientDetails extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogoffClientActionPerformed
 
-    private void btnResetTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetTimeActionPerformed
-        int choice = JOptionPane.showConfirmDialog(null,"Confirm reset time ?","Confirmation",JOptionPane.YES_NO_OPTION);
-        if(choice==JOptionPane.YES_OPTION){
-            txtStartTime.setText("----");
-            txtEndTime.setText("----");
-            this.serverGUI.setTimerForClients(this.myIp, "----", "----",this.rowIndex);
-        }
-    }//GEN-LAST:event_btnResetTimeActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(this.client.getSocket().isInputShutdown() || !this.client.getSocket().isConnected()){
             JOptionPane.showMessageDialog(null,"Logoff Unsuccessful.!!!.Client Disconnected From Network. Please check the client computer.","Client Disconnected",JOptionPane.OK_OPTION);
@@ -791,6 +637,10 @@ public class ClientDetails extends javax.swing.JFrame {
     private void turnOffMinutesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_turnOffMinutesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_turnOffMinutesActionPerformed
+
+    private void txtCurrentTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCurrentTimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCurrentTimeActionPerformed
     public void setMessageFromClient(String message){
         this.txtMessageToClientDisplay.setText(this.txtMessageToClientDisplay.getText()+"\n From Client : "+message);
     }
@@ -834,21 +684,12 @@ public class ClientDetails extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogoffClient;
-    private javax.swing.JButton btnResetTime;
     private javax.swing.JButton btnSendMessageToClient;
-    private javax.swing.JButton btnSetTime;
     private javax.swing.JButton btnTurnOff;
     private java.awt.Checkbox chkAlert;
-    private javax.swing.JComboBox<String> comboHour;
-    private javax.swing.JComboBox<String> comboMinutes;
-    private javax.swing.JComboBox<String> comboSeconds;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
