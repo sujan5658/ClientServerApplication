@@ -50,11 +50,16 @@ public class ClientService extends Thread {
         this.getClientDetails();
         Thread connection = new ConnectionChecker(this.clientGUI,this.serverIp);
         connection.start();
+        
         try {
             this.objectOut = new ObjectOutputStream(mysocket.getOutputStream());
             this.dataIn = new DataInputStream(mysocket.getInputStream());
             this.dataOut = new DataOutputStream(mysocket.getOutputStream());
             this.objectOut.writeObject(this.client);
+            
+            Thread idleTime = new IdleTimeService(this.clientGUI,this.dataOut);
+            idleTime.start();
+            
             String msg = "";
             boolean isAlert=false;
             Runtime runTime = Runtime.getRuntime();
@@ -68,9 +73,10 @@ public class ClientService extends Thread {
                     case "#shutdown@yourself#":
                         this.mysocket.close();
                         //This code is for window
-                        //runTime.exec("shutdown -s -t 0");
+                        msg = "From Server :  ";
+                        runTime.exec("shutdown -s -t 0");
                         //This code is for linux and mac.
-                        runTime.exec("shutdown -h now");
+                        //runTime.exec("shutdown -h now");
                         break;
                     case "#logoff@yourself#":
                         this.mysocket.close();
@@ -90,7 +96,14 @@ public class ClientService extends Thread {
                             isAlert = false;
                             msg = msg.substring(1);
                         }
-                        msg = "From Server : "+msg;
+                        if(msg.indexOf("$Set$Idle$Time$")!=-1){
+                            String [] values = msg.split(":");
+                            int minutes = Integer.parseInt(values[1]);
+                            IdleTimeService.idleTimeout = minutes;
+                        }else{
+                            msg = "From Server : "+msg;
+                        }
+                        
                 }
                 if(!msg.equals("From Server :  ")){
                     this.clientGUI.setServerMessageInMessageBox(isAlert,msg);

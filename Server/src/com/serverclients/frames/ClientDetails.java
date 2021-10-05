@@ -14,6 +14,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.text.DefaultCaret;
@@ -68,6 +70,7 @@ public class ClientDetails extends javax.swing.JFrame {
         txtConnectedTime.setText(client.getConnectedTime());
         txtStartTime.setText(client.getStartTime());
         txtEndTime.setText(client.getEndTime());
+        lvlTurnOffTime.setText(client.getIdleTurnOffTime()+" min");
         this.serverGUI = serverGUI;
         Thread myTimer = new TimerThread(this);
         myTimer.start();
@@ -83,7 +86,7 @@ public class ClientDetails extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        lvlSetTurnOffTime = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtClientIpAddress = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -104,6 +107,12 @@ public class ClientDetails extends javax.swing.JFrame {
         txtEndTime = new javax.swing.JTextField();
         btnLogoffClient = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        turnOffMinutes = new javax.swing.JComboBox<>();
+        btnTurnOff = new javax.swing.JButton();
+        lvlTurnOffTime = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
         rightPanel = new javax.swing.JPanel();
         rightTopPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -132,12 +141,12 @@ public class ClientDetails extends javax.swing.JFrame {
 
         leftPanel.setBackground(new java.awt.Color(0, 153, 0));
 
-        jLabel4.setBackground(new java.awt.Color(51, 0, 102));
-        jLabel4.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Client Details");
-        jLabel4.setOpaque(true);
+        lvlSetTurnOffTime.setBackground(new java.awt.Color(51, 0, 102));
+        lvlSetTurnOffTime.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
+        lvlSetTurnOffTime.setForeground(new java.awt.Color(255, 255, 255));
+        lvlSetTurnOffTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lvlSetTurnOffTime.setText("set turn off Time after Idle");
+        lvlSetTurnOffTime.setOpaque(true);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -212,49 +221,106 @@ public class ClientDetails extends javax.swing.JFrame {
             }
         });
 
+        jLabel18.setBackground(new java.awt.Color(51, 0, 102));
+        jLabel18.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Client Details");
+        jLabel18.setOpaque(true);
+
+        jLabel19.setBackground(new java.awt.Color(0, 153, 0));
+        jLabel19.setFont(new java.awt.Font("Times New Roman", 1, 15)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setText("Minutes");
+        jLabel19.setOpaque(true);
+
+        turnOffMinutes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        turnOffMinutes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                turnOffMinutesActionPerformed(evt);
+            }
+        });
+
+        btnTurnOff.setText("Set Time");
+        btnTurnOff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTurnOffActionPerformed(evt);
+            }
+        });
+
+        lvlTurnOffTime.setBackground(new java.awt.Color(0, 153, 0));
+        lvlTurnOffTime.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lvlTurnOffTime.setForeground(new java.awt.Color(255, 255, 255));
+        lvlTurnOffTime.setText("10 min");
+        lvlTurnOffTime.setOpaque(true);
+
+        jLabel21.setBackground(new java.awt.Color(0, 153, 0));
+        jLabel21.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("After Idle, client turn off time :");
+        jLabel21.setOpaque(true);
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(leftPanelLayout.createSequentialGroup()
-                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(txtPortNo)
-                            .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lvlSetTurnOffTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(leftPanelLayout.createSequentialGroup()
                                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnLogoffClient, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(txtPortNo)
+                                    .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                                .addComponent(btnLogoffClient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel19)
+                        .addGap(18, 18, 18)
+                        .addComponent(turnOffMinutes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnTurnOff, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(leftPanelLayout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(111, Short.MAX_VALUE)))
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel4)
-                .addGap(35, 35, 35)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtClientIpAddress))
@@ -290,11 +356,26 @@ public class ClientDetails extends javax.swing.JFrame {
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtEndTime))
-                .addGap(36, 36, 36)
-                .addComponent(jButton1)
+                .addGap(26, 26, 26)
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnLogoffClient))
                 .addGap(18, 18, 18)
-                .addComponent(btnLogoffClient)
-                .addGap(71, 71, 71))
+                .addComponent(lvlSetTurnOffTime)
+                .addGap(18, 18, 18)
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(turnOffMinutes, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnTurnOff, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(8, 8, 8)
+                .addComponent(lvlTurnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                    .addContainerGap(488, Short.MAX_VALUE)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
 
         rightPanel.setBackground(new java.awt.Color(102, 255, 102));
@@ -688,6 +769,28 @@ public class ClientDetails extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnTurnOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnOffActionPerformed
+        int minutes = Integer.parseInt(turnOffMinutes.getSelectedItem().toString());
+        if(minutes == 0){
+            JOptionPane.showMessageDialog(null,"Please select value greater than 0","Zero Value",JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            try {
+                this.dataOut.writeUTF("$Set$Idle$Time$:"+minutes);
+                lvlTurnOffTime.setText(minutes + " min");
+                this.client.setIdleTurnOffTime(minutes);
+                this.serverGUI.setIdleTurnOffTime(this.client.getIpAddress(), minutes);
+                JOptionPane.showMessageDialog(null,"For this client the turn off time set after idle is : "+minutes+" minutes","Set Successful",JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientDetails.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnTurnOffActionPerformed
+
+    private void turnOffMinutesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_turnOffMinutesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_turnOffMinutesActionPerformed
     public void setMessageFromClient(String message){
         this.txtMessageToClientDisplay.setText(this.txtMessageToClientDisplay.getText()+"\n From Client : "+message);
     }
@@ -734,6 +837,7 @@ public class ClientDetails extends javax.swing.JFrame {
     private javax.swing.JButton btnResetTime;
     private javax.swing.JButton btnSendMessageToClient;
     private javax.swing.JButton btnSetTime;
+    private javax.swing.JButton btnTurnOff;
     private java.awt.Checkbox chkAlert;
     private javax.swing.JComboBox<String> comboHour;
     private javax.swing.JComboBox<String> comboMinutes;
@@ -748,9 +852,11 @@ public class ClientDetails extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -759,9 +865,12 @@ public class ClientDetails extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel leftPanel;
+    private javax.swing.JLabel lvlSetTurnOffTime;
+    private javax.swing.JLabel lvlTurnOffTime;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel rightPanel;
     private javax.swing.JPanel rightTopPanel;
+    private javax.swing.JComboBox<String> turnOffMinutes;
     private javax.swing.JTextField txtClientIpAddress;
     private javax.swing.JTextField txtClientOperatingSystem;
     private javax.swing.JTextField txtClientOsArch;
