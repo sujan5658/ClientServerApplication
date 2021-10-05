@@ -48,6 +48,15 @@ public class ServerWorker extends Thread {
                         System.out.println("Reached there");
                         this.serverGui.disconnectClient(this.client.getIpAddress());
                         break;
+                    case "$Going$To$Idle$":
+                        this.serverGui.setClientStatus("IDLE",this.client.getIpAddress());
+                        break;
+                    case "$Being$Online$":
+                        this.serverGui.setClientStatus("ONLINE",this.client.getIpAddress());
+                        break;
+                    case "$Being$Idle$":
+                        this.dataOut.writeUTF("#shutdown@yourself#");
+                        break;
                     default:
                         this.client.setMsgFromServer(this.client.getMsgFromServer()+"\n From Client : "+msg);
                         this.serverGui.setMessageInClientDetails(msg,this.client.getIpAddress());
@@ -59,7 +68,7 @@ public class ServerWorker extends Thread {
             this.mySocket.close();
         } catch (IOException ex) {
             //Logger.getLogger(ServerWorker.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception IOException from serverworker");
+            System.out.println("Exception IOException from serverworker : "+ex.getMessage());
             this.serverGui.disconnectClient(this.client.getIpAddress());
         } catch (ClassNotFoundException ex) {
             System.out.println("Error : "+ex.getMessage());

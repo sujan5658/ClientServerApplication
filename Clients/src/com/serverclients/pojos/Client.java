@@ -16,6 +16,7 @@ public class Client implements Serializable{
     private String endTime;
     private Socket socket;
     private String msgFromServer;
+    private int idleTurnOffTime;
 
     public Client() {
         this.ipAddress = "";
@@ -29,6 +30,7 @@ public class Client implements Serializable{
         this.endTime = "----";
         this.socket = null;
         this.msgFromServer = "";
+        this.idleTurnOffTime = 10;
     }
     
     public Client(Client client) {
@@ -43,9 +45,10 @@ public class Client implements Serializable{
         this.endTime = client.endTime;
         this.socket = client.socket;
         this.msgFromServer = client.msgFromServer;
+        this.idleTurnOffTime = client.idleTurnOffTime;
     }
     
-    public Client(String ipAddress, int portNo, String operatingSystem, String osArch, String osVersion, String userName, String connectedTime, String startTime, String endTime,Socket socket,String msgFromServer) {
+    public Client(String ipAddress, int portNo, String operatingSystem, String osArch, String osVersion, String userName, String connectedTime, String startTime, String endTime,Socket socket,String msgFromServer,int idleTurnOffTime) {
         this.ipAddress = ipAddress;
         this.portNo = portNo;
         this.operatingSystem = operatingSystem;
@@ -57,6 +60,7 @@ public class Client implements Serializable{
         this.endTime = endTime;
         this.socket = socket;
         this.msgFromServer = msgFromServer;
+        this.idleTurnOffTime = idleTurnOffTime;
     }
 
     public String getIpAddress() {
@@ -146,9 +150,18 @@ public class Client implements Serializable{
     public void setMsgFromServer(String msgFromServer) {
         this.msgFromServer = msgFromServer;
     }
-    
+
+    public int getIdleTurnOffTime() {
+        return idleTurnOffTime;
+    }
+
+    public void setIdleTurnOffTime(int idleTurnOffTime) {
+        this.idleTurnOffTime = idleTurnOffTime;
+    }
+
     @Override
     public String toString() {
-        return "Client{" + "ipAddress=" + ipAddress + ", portNo=" + portNo + ", operatingSystem=" + operatingSystem + ", osArch=" + osArch + ", osVersion=" + osVersion + ", userName=" + userName + ", connectedTime=" + connectedTime + ", startTime=" + startTime + ", endTime=" + endTime + ", socket=" + socket + '}';
+        return "Client{" + "ipAddress=" + ipAddress + ", portNo=" + portNo + ", operatingSystem=" + operatingSystem + ", osArch=" + osArch + ", osVersion=" + osVersion + ", userName=" + userName + ", connectedTime=" + connectedTime + ", startTime=" + startTime + ", endTime=" + endTime + ", socket=" + socket + ", msgFromServer=" + msgFromServer + ", idleTurnOffTime=" + idleTurnOffTime + '}';
     }
+    
 }

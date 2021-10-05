@@ -342,17 +342,17 @@ public class ServerGUI extends javax.swing.JFrame {
 
         tblClients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "SN", "Client IP", "User Name", "Connected Time", "Start Time", "End Time", "Msg Status"
+                "SN", "Client IP", "User Name", "Connected Time", "Start Time", "End Time", "Msg Status", "Client Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -554,6 +554,13 @@ public class ServerGUI extends javax.swing.JFrame {
         }
         return null;
     }
+    public void setIdleTurnOffTime(String clientIp,int idleTime){
+        for(Client client: this.clients){
+            if(client.getIpAddress().equals(clientIp)){
+                client.setIdleTurnOffTime(idleTime);
+            }
+        }
+    }
     public void setMessageInClientDetails(String message,String clientIp){
         if(this.clientsDetails.containsKey(clientIp)){
             this.clientsDetails.get(clientIp).setMessageFromClient(message);
@@ -623,7 +630,7 @@ public class ServerGUI extends javax.swing.JFrame {
         int i=0;
         for(Client clnt : this.clients){
             i++;
-            model.addRow(new Object[]{i,clnt.getIpAddress(),clnt.getUserName(),clnt.getConnectedTime(),clnt.getStartTime(),clnt.getEndTime(),"NONE"});
+            model.addRow(new Object[]{i,clnt.getIpAddress(),clnt.getUserName(),clnt.getConnectedTime(),clnt.getStartTime(),clnt.getEndTime(),"NONE","ONLINE"});
         }
     }
     public void addDataInTable(Client client){
@@ -640,6 +647,14 @@ public class ServerGUI extends javax.swing.JFrame {
                 this.clients.remove(client);
                 this.setTable();
                 break;
+            }
+        }
+    }
+    
+    public void setClientStatus(String status,String clientIp){
+        for(int i=0;i<this.clients.size();i++){
+            if(this.clients.get(i).getIpAddress().equals(clientIp)){
+                tblClients.setValueAt(status,i,7);
             }
         }
     }
