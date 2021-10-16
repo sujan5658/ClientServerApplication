@@ -5,11 +5,19 @@ import com.serverclients.frames.ServerGUI;
 import com.serverclients.pojos.Client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ServerWorker extends Thread {
@@ -24,6 +32,36 @@ public class ServerWorker extends Thread {
         this.serverGui = serverGui;
         this.mySocket = mySocket;
         this.client = new Client();
+    }
+    
+    public void updateEndTimeForCustomer(){
+        ArrayList<Client> clients = new ArrayList<Client>();
+        String path = "Files"+File.separator+"clientsList.txt";
+        File file = new File(path);
+        try {
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            clients = (ArrayList<Client>)objectIn.readObject();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm:ss");  
+            LocalDateTime now = LocalDateTime.now();  
+           
+            for(Client client : clients){
+                if(client.getClientUniqueNumber().equals(this.client.getClientUniqueNumber())){
+                    client.setEndTime(dtf.format(now));
+                }
+            }
+            objectIn.close();
+            fileIn.close();
+            
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(clients);
+            objectOut.close();
+            fileOut.close();
+        } catch (Exception ex) {
+            Logger.getLogger(ServerWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     public void run(){
         try {
@@ -45,7 +83,7 @@ public class ServerWorker extends Thread {
                 msg = this.dataIn.readUTF();
                 switch(msg){
                     case "DisconnectMe":
-                        System.out.println("Reached there");
+                        this.updateEndTimeForCustomer();
                         this.serverGui.disconnectClient(this.client.getIpAddress());
                         break;
                     case "$Going$To$Idle$":

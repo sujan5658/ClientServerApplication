@@ -17,6 +17,9 @@ public class Client implements Serializable{
     private Socket socket;
     private String msgFromServer;
     private int idleTurnOffTime;
+    private String customerUserName;
+    private String userUniqueId;
+    private String clientUniqueNumber;
 
     public Client() {
         this.ipAddress = "";
@@ -31,6 +34,9 @@ public class Client implements Serializable{
         this.socket = null;
         this.msgFromServer = "";
         this.idleTurnOffTime = 10;
+        this.customerUserName= "";
+        this.userUniqueId="";
+        this.clientUniqueNumber="";
     }
     
     public Client(Client client) {
@@ -46,9 +52,12 @@ public class Client implements Serializable{
         this.socket = client.socket;
         this.msgFromServer = client.msgFromServer;
         this.idleTurnOffTime = client.idleTurnOffTime;
+        this.customerUserName = client.customerUserName;
+        this.userUniqueId = client.userUniqueId;
+        this.clientUniqueNumber = client.clientUniqueNumber;
     }
     
-    public Client(String ipAddress, int portNo, String operatingSystem, String osArch, String osVersion, String userName, String connectedTime, String startTime, String endTime,Socket socket,String msgFromServer,int idleTurnOffTime) {
+    public Client(String ipAddress, int portNo, String operatingSystem, String osArch, String osVersion, String userName, String connectedTime, String startTime, String endTime,Socket socket,String msgFromServer,int idleTurnOffTime,String customerUserName, String userUniqueId,String clientUniqueNumber) {
         this.ipAddress = ipAddress;
         this.portNo = portNo;
         this.operatingSystem = operatingSystem;
@@ -61,6 +70,9 @@ public class Client implements Serializable{
         this.socket = socket;
         this.msgFromServer = msgFromServer;
         this.idleTurnOffTime = idleTurnOffTime;
+        this.customerUserName = customerUserName;
+        this.userUniqueId = userUniqueId;
+        this.clientUniqueNumber = clientUniqueNumber;
     }
 
     public String getIpAddress() {
@@ -159,9 +171,33 @@ public class Client implements Serializable{
         this.idleTurnOffTime = idleTurnOffTime;
     }
 
+    public String getCustomerUserName() {
+        return customerUserName;
+    }
+
+    public void setCustomerUserName(String customerUserName) {
+        this.customerUserName = customerUserName;
+    }
+
+    public String getUserUniqueId() {
+        return userUniqueId;
+    }
+
+    public void setUserUniqueId(String userUniqueId) {
+        this.userUniqueId = userUniqueId;
+    }
+
+    public String getClientUniqueNumber() {
+        return clientUniqueNumber;
+    }
+
+    public void setClientUniqueNumber(String clientUniqueNumber) {
+        this.clientUniqueNumber = clientUniqueNumber;
+    }
+
     @Override
     public String toString() {
-        return "Client{" + "ipAddress=" + ipAddress + ", portNo=" + portNo + ", operatingSystem=" + operatingSystem + ", osArch=" + osArch + ", osVersion=" + osVersion + ", userName=" + userName + ", connectedTime=" + connectedTime + ", startTime=" + startTime + ", endTime=" + endTime + ", socket=" + socket + ", msgFromServer=" + msgFromServer + ", idleTurnOffTime=" + idleTurnOffTime + '}';
+        return "Client{" + "ipAddress=" + ipAddress + ", portNo=" + portNo + ", operatingSystem=" + operatingSystem + ", osArch=" + osArch + ", osVersion=" + osVersion + ", userName=" + userName + ", connectedTime=" + connectedTime + ", startTime=" + startTime + ", endTime=" + endTime + ", socket=" + socket + ", msgFromServer=" + msgFromServer + ", idleTurnOffTime=" + idleTurnOffTime + ", customerUserName=" + customerUserName + ", userUniqueId=" + userUniqueId + ", clientUniqueNumber=" + clientUniqueNumber + '}';
     }
-    
+
 }

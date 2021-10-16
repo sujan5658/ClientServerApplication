@@ -7,14 +7,22 @@ package com.serverclients.frames;
 
 import com.serverclients.pojos.Client;
 import com.serverclients.services.ConnectionChecker;
+import com.serverclients.services.ReportGenerator;
 import com.serverclients.services.ServerService;
 import com.serverclients.services.StatusBar;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -116,6 +124,8 @@ public class ServerGUI extends javax.swing.JFrame {
         lvlMessage = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblClients = new javax.swing.JTable();
+        btnGenerateReport = new javax.swing.JButton();
+        btnResetReportData = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Remote Server");
@@ -366,14 +376,28 @@ public class ServerGUI extends javax.swing.JFrame {
             tblClients.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
+        btnGenerateReport.setText("Generate Report");
+        btnGenerateReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateReportActionPerformed(evt);
+            }
+        });
+
+        btnResetReportData.setText("Reset Report Data");
+        btnResetReportData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetReportDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout rightPanelLayout = new javax.swing.GroupLayout(rightPanel);
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPanelLayout.createSequentialGroup()
+            .addGroup(rightPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2)
+                .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(rightPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -381,7 +405,11 @@ public class ServerGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
-                            .addComponent(lvlMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(lvlMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPanelLayout.createSequentialGroup()
+                        .addComponent(btnGenerateReport, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnResetReportData, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         rightPanelLayout.setVerticalGroup(
@@ -396,8 +424,12 @@ public class ServerGUI extends javax.swing.JFrame {
                         .addComponent(lvlMessage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnResetReportData)
+                    .addComponent(btnGenerateReport))
                 .addContainerGap())
         );
 
@@ -605,6 +637,61 @@ public class ServerGUI extends javax.swing.JFrame {
     private void btnAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAboutMouseClicked
         JOptionPane.showMessageDialog(null,"Server Version 1.0.0","About Server",JOptionPane.OK_OPTION,new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png")));
     }//GEN-LAST:event_btnAboutMouseClicked
+
+    private void btnResetReportDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReportDataActionPerformed
+        int action = JOptionPane.showConfirmDialog(null,"Are you sure to reset Report Data ?","Confirm Reset",JOptionPane.INFORMATION_MESSAGE);
+        if(action == 0){
+            String filePath = "Files"+File.separator+"clientsList.txt";
+            File file = new File(filePath);
+            if(file.exists()){
+                file.delete();
+            }
+            JOptionPane.showMessageDialog(null,"The Report Data Has Been Reset","Reset Successful",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnResetReportDataActionPerformed
+
+    private void btnGenerateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
+        String filePath = "Files"+File.separator+"clientsList.txt";
+        File file = new File(filePath);
+        if(!file.exists()){
+            JOptionPane.showMessageDialog(null,"No old records found","Records not available",JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            if(file.length()>1){
+                ArrayList<Client> clients = new ArrayList<Client>();
+                FileInputStream fileIn;
+                try {
+                    fileIn = new FileInputStream(filePath);
+                    ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                    clients = (ArrayList<Client>)objectIn.readObject();
+                    objectIn.close();
+                    fileIn.close();
+                    
+                    ReportGenerator reportGenerator = new ReportGenerator(clients);
+                    if(reportGenerator.generateReport()){
+                        if (Desktop.isDesktopSupported()) {
+                            int userAction = JOptionPane.showConfirmDialog(null,"Report Generated Successfully. Open generated file ?","Success", JOptionPane.YES_NO_OPTION);
+                            if(userAction == JOptionPane.YES_OPTION){
+                                String currentFilePath = reportGenerator.getFilePath();
+                                File currentFile = new File(currentFilePath);
+                                Desktop.getDesktop().open(currentFile);
+                            }
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null,"Report Generated Successfully","Success",JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Problem generating report.","Error occured",JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null,"No old records found","Records not available",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
     /** User defined methods starts **/
     public void setTimerForClients(String ip,String startTime,String endTime,int rowIndex){
         for(Client client:this.clients){
@@ -633,9 +720,51 @@ public class ServerGUI extends javax.swing.JFrame {
             model.addRow(new Object[]{i,clnt.getIpAddress(),clnt.getUserName(),clnt.getConnectedTime(),clnt.getStartTime(),clnt.getEndTime(),"NONE","ONLINE"});
         }
     }
+    private void addClientToFile(Client client){
+        String folderPath = "Files";
+        File folder = new File(folderPath);
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+      
+        String filePath = "Files"+File.separator+"clientsList.txt";
+        File file = new File(filePath);
+        
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(ServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            ArrayList<Client> clients = new ArrayList<Client>();
+            if(file.length()>1){
+                FileInputStream fileIn = new FileInputStream(filePath);
+                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                clients = (ArrayList<Client>)objectIn.readObject();
+                objectIn.close();
+                fileIn.close();
+            }
+            
+            Client newClient = new Client(client);
+            newClient.setSocket(null);
+            clients.add(newClient);
+            
+            FileOutputStream fileOut = new FileOutputStream(filePath);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(clients);
+            objectOut.close();
+            fileOut.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
     public void addDataInTable(Client client){
         this.clients.add(client);
         this.setTable();
+        this.addClientToFile(client);
+        System.out.println(client);
     }
     public void disconnectClient(String clientIp){
         for(Client client: this.clients){
@@ -697,6 +826,8 @@ public class ServerGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnAbout;
     private javax.swing.JLabel btnExit;
+    private javax.swing.JButton btnGenerateReport;
+    private javax.swing.JButton btnResetReportData;
     private javax.swing.JLabel btnStartServer;
     private javax.swing.JLabel btnStopServer;
     private javax.swing.JLabel btnViewClientDetails;
