@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +24,8 @@ public class ClientService extends Thread {
     private String serverIp;
     private ClientGUI clientGUI;
     private Client client;
+    private String userUniqueId;
+    private String customerUserName;
     
     private void getClientDetails(){
         this.client = new Client();
@@ -37,13 +41,21 @@ public class ClientService extends Thread {
         this.client.setOperatingSystem(System.getProperty("os.name"));
         this.client.setOsVersion(System.getProperty("os.version"));
         this.client.setOsArch(System.getProperty("os.arch"));
+        this.client.setCustomerUserName(this.customerUserName);
+        this.client.setUserUniqueId(this.userUniqueId);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd:mm:YYYY:HH:mm:ss");
+        String date = formatter.format(new Date());
+        String key = this.customerUserName+this.userUniqueId+date;
+        this.client.setClientUniqueNumber(key);
     }
-    public ClientService(String serverIp,int port,ClientGUI clientGUI) throws IOException{
+    public ClientService(String serverIp,int port,ClientGUI clientGUI,String customerUserName,String userUniqueId) throws IOException{
         this.serverIp = serverIp;
         this.clientGUI = clientGUI;
         this.port = port;
         mysocket = new Socket(serverIp,port);
         clientGUI.setConnectionMessage();
+        this.customerUserName = customerUserName;
+        this.userUniqueId = userUniqueId;
     }
   
     public void run(){

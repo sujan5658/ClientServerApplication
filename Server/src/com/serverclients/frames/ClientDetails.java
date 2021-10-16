@@ -71,6 +71,8 @@ public class ClientDetails extends javax.swing.JFrame {
         txtStartTime.setText(client.getStartTime());
         txtEndTime.setText(client.getEndTime());
         lvlTurnOffTime.setText(client.getIdleTurnOffTime()+" min");
+        txtCustomerName.setText(client.getCustomerUserName());
+        txtUserUniqueId.setText(client.getUserUniqueId());
         this.serverGUI = serverGUI;
         Thread myTimer = new TimerThread(this);
         myTimer.start();
@@ -107,6 +109,10 @@ public class ClientDetails extends javax.swing.JFrame {
         btnLogoffClient = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtCustomerName = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtUserUniqueId = new javax.swing.JTextField();
         rightPanel = new javax.swing.JPanel();
         rightTopPanel = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
@@ -212,6 +218,18 @@ public class ClientDetails extends javax.swing.JFrame {
         jLabel18.setText("Client Details");
         jLabel18.setOpaque(true);
 
+        jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Customer Name   :");
+
+        txtCustomerName.setEditable(false);
+
+        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("ID Number           :");
+
+        txtUserUniqueId.setEditable(false);
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
@@ -220,33 +238,41 @@ public class ClientDetails extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(leftPanelLayout.createSequentialGroup()
-                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(txtPortNo)
-                            .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(leftPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtClientIpAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(txtPortNo)
+                                    .addComponent(txtClientOperatingSystem, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientUserName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientOsVersion, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtClientOsArch, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtConnectedTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtStartTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtEndTime, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtCustomerName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtUserUniqueId))))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLogoffClient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33))))
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,11 +315,19 @@ public class ClientDetails extends javax.swing.JFrame {
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtEndTime))
-                .addGap(63, 63, 63)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCustomerName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtUserUniqueId))
+                .addGap(53, 53, 53)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLogoffClient)
                     .addComponent(jButton1))
-                .addGap(109, 109, 109))
+                .addGap(59, 59, 59))
         );
 
         rightPanel.setBackground(new java.awt.Color(102, 255, 102));
@@ -690,6 +724,8 @@ public class ClientDetails extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -719,10 +755,12 @@ public class ClientDetails extends javax.swing.JFrame {
     private javax.swing.JTextField txtClientUserName;
     private javax.swing.JTextField txtConnectedTime;
     private javax.swing.JTextField txtCurrentTime;
+    private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtEndTime;
     private javax.swing.JTextField txtMessageToClient;
     private javax.swing.JTextArea txtMessageToClientDisplay;
     private javax.swing.JTextField txtPortNo;
     private javax.swing.JTextField txtStartTime;
+    private javax.swing.JTextField txtUserUniqueId;
     // End of variables declaration//GEN-END:variables
 }
