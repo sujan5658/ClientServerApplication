@@ -36,7 +36,7 @@ public class ClientService extends Thread {
             Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.client.setIpAddress(ip);
-        this.client.setUserName(System.getProperty("user.name"));
+        this.client.setUserName(this.customerUserName);
         this.client.setPortNo(this.port);
         this.client.setOperatingSystem(System.getProperty("os.name"));
         this.client.setOsVersion(System.getProperty("os.version"));
@@ -53,9 +53,13 @@ public class ClientService extends Thread {
         this.clientGUI = clientGUI;
         this.port = port;
         mysocket = new Socket(serverIp,port);
-        clientGUI.setConnectionMessage();
+        clientGUI.setConnectionMessage(customerUserName,userUniqueId);
+        TurnOffTimer.threadStatus = false;
+        clientGUI.removeTimerValue();
         this.customerUserName = customerUserName;
         this.userUniqueId = userUniqueId;
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm aa");
+        this.clientGUI.setConnectionTime(formatter.format(new Date()));
     }
   
     public void run(){
@@ -80,12 +84,12 @@ public class ClientService extends Thread {
                 switch(msg){
                     case "ServerStopped":
                         this.clientGUI.setDisconnectedMessage();
-                        msg = "From Server : Server Stopped. Connection loss.!!!";
+                        msg = " From Staff : Server Stopped. Connection loss.!!!";
                         break;
                     case "#shutdown@yourself#":
                         this.mysocket.close();
                         //This code is for window
-                        msg = "From Server :  ";
+                        msg = "From Staff :  ";
                         runTime.exec("shutdown -s -t 0");
                         //This code is for linux and mac.
                         //runTime.exec("shutdown -h now");
@@ -93,9 +97,9 @@ public class ClientService extends Thread {
                     case "#logoff@yourself#":
                         this.mysocket.close();
                         //This code is for window
-                        //runTime.exec("shutdown -L");
+                        runTime.exec("shutdown -L");
                         //This code is for linux and mac
-                        runTime.exec("osascript -e 'tell app \"System Events\" to  «event aevtrlgo»'");
+//                        runTime.exec("osascript -e 'tell app \"System Events\" to  «event aevtrlgo»'");
                         //If above code doesnot work for mac you can try this also.
                         //runTime.exec("osascript -e 'tell app \"System Events\" to log out'");
                         break;
@@ -113,11 +117,10 @@ public class ClientService extends Thread {
                             int minutes = Integer.parseInt(values[1]);
                             IdleTimeService.idleTimeout = minutes;
                         }else{
-                            msg = "From Server : "+msg;
-                        }
-                        
+                            msg = " From Staff : "+msg;
+                        }   
                 }
-                if(!msg.equals("From Server :  ")){
+                if(!msg.equals(" From Staff :  ")){
                     this.clientGUI.setServerMessageInMessageBox(isAlert,msg);
                 }
                 isAlert=false;
