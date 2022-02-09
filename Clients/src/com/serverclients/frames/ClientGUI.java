@@ -8,6 +8,8 @@ package com.serverclients.frames;
 import com.serverclients.pojos.Client;
 import com.serverclients.services.ClientService;
 import com.serverclients.services.ConnectionChecker;
+import com.serverclients.services.IdleTimeService;
+import com.serverclients.services.TurnOffTimer;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataOutputStream;
@@ -48,10 +50,6 @@ public class ClientGUI extends javax.swing.JFrame {
             String name = System.getProperty("name");
             String osArch = System.getProperty("os.arch");
             String osVersion = System.getProperty("os.version");
-            this.txtIpAddress.setText(ipAddress);
-            this.txtUserName.setText(userName);
-            this.txtOperating.setText(operatingSystem);
-            
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,"Please connect to network","Not connected",JOptionPane.INFORMATION_MESSAGE);
@@ -59,16 +57,25 @@ public class ClientGUI extends javax.swing.JFrame {
     }
     public ClientGUI() {
         initComponents();
+        String command = "PowerShell -Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('Please connect to staff computer using the app within given time. In case if the computer is not connected within the time, it will automatically shutdown. Thank you.!!')\"";
+        Runtime runTime = Runtime.getRuntime();
+        try {
+            runTime.exec(command);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         DefaultCaret caret = (DefaultCaret)txtMessageFromServer.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         this.setClientDetail();
         this.myself = this;
+        Thread turnOffTimer = new TurnOffTimer(this);
+        turnOffTimer.start();
         this.addWindowListener(new WindowAdapter()
         {
             @Override
             public void windowClosing(WindowEvent e)
             {
-                int choice = JOptionPane.showConfirmDialog(null,"Are you sure to exit ?","Confirmation",JOptionPane.YES_NO_OPTION);
+                int choice = JOptionPane.showConfirmDialog(null,"Are you sure to exit ? Computer will shutdown immediately after closing connection with staff..!!","Confirmation",JOptionPane.YES_NO_OPTION);
                 if(choice==JOptionPane.YES_OPTION){
                     try {
                         if(!ClientService.mysocket.isClosed()){
@@ -82,9 +89,18 @@ public class ClientGUI extends javax.swing.JFrame {
                         System.out.println("Exception in window closing.");
                     }
                     finally{
+                        TurnOffTimer.threadStatus = false;
                         ConnectionChecker.threadStatus = false;
+                        IdleTimeService.threadStatus = false;
+                        Runtime runTime = Runtime.getRuntime();
+                        try {
+                            runTime.exec("shutdown -s -t 0");
+                        } catch (IOException ex) {
+                            Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         dispose();
                     }
+                    System.out.println("From outside closing");
                 }
             }
         });
@@ -101,10 +117,6 @@ public class ClientGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         txtHeading = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtServerIpAddress = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        txtServerPort = new javax.swing.JTextField();
         btnConnectToServer = new javax.swing.JButton();
         btnDisconnect = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -112,21 +124,21 @@ public class ClientGUI extends javax.swing.JFrame {
         txtCustomerUserName = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtUserUniqueId = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         lvlConnectionStatus = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lvlConnectionMsg = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        txtServer = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txtPort = new javax.swing.JTextField();
-        txtIpAddress = new javax.swing.JTextField();
         txtUserName = new javax.swing.JTextField();
-        txtOperating = new javax.swing.JTextField();
+        txtIcNumber = new javax.swing.JTextField();
+        turnOffTime = new javax.swing.JLabel();
+        lvlWarningMessage = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtConnectedTime = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -144,17 +156,8 @@ public class ClientGUI extends javax.swing.JFrame {
         txtHeading.setBackground(new java.awt.Color(51, 0, 102));
         txtHeading.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
         txtHeading.setForeground(new java.awt.Color(255, 255, 255));
-        txtHeading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png"))); // NOI18N
-        txtHeading.setText("Connect To server");
+        txtHeading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logoNew1.PNG"))); // NOI18N
         txtHeading.setOpaque(true);
-
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Server Ip Address :");
-
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Server Port           :");
 
         btnConnectToServer.setText("Connect");
         btnConnectToServer.addActionListener(new java.awt.event.ActionListener() {
@@ -182,62 +185,71 @@ public class ClientGUI extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Customer User Name :");
+        jLabel5.setText("User Name :");
 
         jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("ID Number");
+        jLabel13.setText("IC Number :");
+
+        txtUserUniqueId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUserUniqueIdActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Welcome");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("To Pustaka");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtUserUniqueId)
+                    .addComponent(txtCustomerUserName, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(txtHeading)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtHeading, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtServerIpAddress)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtServerPort)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCustomerUserName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txtUserUniqueId))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnConnectToServer, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDisconnect, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(20, 20, 20))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnConnectToServer, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDisconnect, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(115, 115, 115))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtHeading)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtServerIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtHeading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCustomerUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,16 +257,18 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUserUniqueId, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConnectToServer, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDisconnect, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap())
+                .addGap(22, 22, 22))
         );
 
         jPanel2.setBackground(new java.awt.Color(51, 255, 51));
+        jPanel2.setMaximumSize(new java.awt.Dimension(509, 478));
+        jPanel2.setMinimumSize(new java.awt.Dimension(509, 478));
 
         jLabel4.setBackground(new java.awt.Color(51, 0, 102));
         jLabel4.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
@@ -272,33 +286,43 @@ public class ClientGUI extends javax.swing.JFrame {
         lvlConnectionStatus.setOpaque(true);
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel3.setMaximumSize(new java.awt.Dimension(470, 144));
+        jPanel3.setPreferredSize(new java.awt.Dimension(470, 144));
 
-        jLabel6.setText("Ip Address");
+        jLabel7.setText("User Name :");
 
-        jLabel7.setText("User Name");
+        jLabel8.setText("IC Number :");
 
-        jLabel8.setText("Operating");
+        lvlConnectionMsg.setText("If not conneted to server in above given time, PC will shutdown immediately.");
 
-        lvlConnectionMsg.setText("Not connected yet.");
-
-        jLabel11.setText("Server IP Address : ");
-
-        txtServer.setEditable(false);
-        txtServer.addActionListener(new java.awt.event.ActionListener() {
+        txtUserName.setEditable(false);
+        txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtServerActionPerformed(evt);
+                txtUserNameActionPerformed(evt);
             }
         });
 
-        jLabel12.setText("Server Port Address : ");
+        txtIcNumber.setEditable(false);
+        txtIcNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIcNumberActionPerformed(evt);
+            }
+        });
 
-        txtPort.setEditable(false);
+        turnOffTime.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        turnOffTime.setText("time");
 
-        txtIpAddress.setEditable(false);
+        lvlWarningMessage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lvlWarningMessage.setText("Please connect to staff within");
 
-        txtUserName.setEditable(false);
+        jLabel11.setText("Connected Time :");
 
-        txtOperating.setEditable(false);
+        txtConnectedTime.setEditable(false);
+        txtConnectedTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtConnectedTimeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -306,63 +330,61 @@ public class ClientGUI extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOperating, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lvlConnectionMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtServer)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPort))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIcNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lvlWarningMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtConnectedTime, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(turnOffTime, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 59, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(lvlConnectionMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtConnectedTime, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lvlConnectionMsg)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(lvlWarningMessage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(turnOffTime))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtOperating, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addComponent(txtIcNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(lvlConnectionMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel4.setMaximumSize(new java.awt.Dimension(470, 242));
+        jPanel4.setMinimumSize(new java.awt.Dimension(470, 242));
+        jPanel4.setPreferredSize(new java.awt.Dimension(470, 242));
 
         jLabel9.setBackground(new java.awt.Color(51, 0, 102));
         jLabel9.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Message From Server");
+        jLabel9.setText("Message From Staff");
         jLabel9.setOpaque(true);
 
         txtMessageFromServer.setEditable(false);
@@ -374,7 +396,7 @@ public class ClientGUI extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Send Message To Server");
+        jLabel10.setText("Send Message To Staff");
         jLabel10.setOpaque(true);
 
         btnSendMessage.setText("Send");
@@ -391,9 +413,9 @@ public class ClientGUI extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(txtMessageToServer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -407,12 +429,12 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtMessageToServer, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                    .addComponent(txtMessageToServer)
                     .addComponent(btnSendMessage))
                 .addGap(13, 13, 13)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -423,12 +445,12 @@ public class ClientGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lvlConnectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)))
+                        .addComponent(lvlConnectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -439,10 +461,10 @@ public class ClientGUI extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(lvlConnectionStatus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -457,16 +479,18 @@ public class ClientGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(762, 510));
+        setSize(new java.awt.Dimension(833, 510));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConnectToServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectToServerActionPerformed
-        this.serverIp = this.txtServerIpAddress.getText();
-        String strPort = this.txtServerPort.getText();
+        this.serverIp = "192.168.0.173";
+        String strPort = "8085";
         computerUserName = this.txtCustomerUserName.getText();
         userUniqueId = this.txtUserUniqueId.getText();
         
@@ -520,21 +544,21 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnConnectToServerActionPerformed
 
-    private void txtServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtServerActionPerformed
-
     private void btnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisconnectActionPerformed
         if(this.isConnected){
             if(!ClientService.mysocket.isClosed()){
-                int choice = JOptionPane.showConfirmDialog(null,"Are you sure to disconnect ?","Confirmation Message",JOptionPane.YES_NO_OPTION);
+                int choice = JOptionPane.showConfirmDialog(null,"Are you sure to disconnect ? Computer will shutdown immediately after disconnecting..!!!","Confirmation Message",JOptionPane.YES_NO_OPTION);
                 if(choice==JOptionPane.YES_OPTION){
                     ConnectionChecker.threadStatus = false;
                     try {
                         DataOutputStream dataOut = new DataOutputStream(ClientService.mysocket.getOutputStream());
                         dataOut.writeUTF("DisconnectMe");
                         ClientService.mysocket.close();
-                        
+                        TurnOffTimer.threadStatus = false;
+                        ConnectionChecker.threadStatus = false;
+                        IdleTimeService.threadStatus = false;
+                        Runtime runTime = Runtime.getRuntime();
+                        runTime.exec("shutdown -s -t 0");
                     } catch (IOException ex) {
                         Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -542,8 +566,6 @@ public class ClientGUI extends javax.swing.JFrame {
                         lvlConnectionStatus.setText("Not Connected");
                         lvlConnectionStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/no-connection.png")));
                         lvlConnectionMsg.setText("Not Connected yet.");
-                        txtServer.setText("");
-                        txtPort.setText("");
                         txtMessageFromServer.setText("");
                         this.isConnected = false;
                     }
@@ -553,7 +575,7 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDisconnectActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        JOptionPane.showMessageDialog(null,"Client Version 1.0.0","About Client",JOptionPane.OK_OPTION,new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png")));
+        JOptionPane.showMessageDialog(null,"Client Version 2.0.0","About Client",JOptionPane.OK_OPTION,new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png")));
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void btnSendMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessageActionPerformed
@@ -575,19 +597,38 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnSendMessageActionPerformed
+
+    private void txtIcNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIcNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIcNumberActionPerformed
+
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUserNameActionPerformed
+
+    private void txtUserUniqueIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserUniqueIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUserUniqueIdActionPerformed
+
+    private void txtConnectedTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtConnectedTimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtConnectedTimeActionPerformed
     //User defined methods starts
-    public void setConnectionMessage(){
-        this.lvlConnectionMsg.setText("Connected  with");
-        this.txtServer.setText(this.serverIp);
-        this.txtPort.setText(Integer.toString(this.port));
+    public void setConnectionMessage(String computerUserName,String userUniqueId){
+        this.lvlConnectionMsg.setText("Thanks for our system, Enjoy!!!!!");
         this.lvlConnectionStatus.setText("Connected");
+        this.txtUserName.setText(computerUserName);
+        this.txtIcNumber.setText(userUniqueId);
         lvlConnectionStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/connect.png")));
     }
     public void setDisconnectedMessage(){
         this.isConnected = false;
         this.lvlConnectionMsg.setText("Not connected yet.");
-        this.txtServer.setText("");
-        this.txtPort.setText("");
+        this.txtUserName.setText("");
+        this.txtIcNumber.setText("");
+        this.lvlWarningMessage.setText("Connection Loss!!Server closed");
+        this.turnOffTime.setText("");
+        this.txtConnectedTime.setText("");
         this.txtMessageFromServer.setText("");
         this.lvlConnectionStatus.setText("Not Connected");
         lvlConnectionStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/no-connection.png")));
@@ -596,16 +637,28 @@ public class ClientGUI extends javax.swing.JFrame {
         txtMessageFromServer.setText(txtMessageFromServer.getText()+"\n"+message);
         if(isAlert){
             //This is windows OS level command for popup box;
-            //String command = "PowerShell -Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('"+message+"')\"";
-//            Runtime runTime = Runtime.getRuntime();
-//            try {
-//                runTime.exec(command);
-//            } catch (IOException ex) {
-//                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            String command = "PowerShell -Command \"Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('"+message+"')\"";
+            Runtime runTime = Runtime.getRuntime();
+            try {
+                runTime.exec(command);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //This is java popupbox
             JOptionPane.showMessageDialog(null,message,"Alert Message",JOptionPane.OK_OPTION);
         }
+    }
+    public void setTimerValue(String value){
+        this.turnOffTime.setText(value);
+    }
+    
+    public void setConnectionTime(String date){
+        this.txtConnectedTime.setText(date);
+    }
+    
+    public void removeTimerValue(){
+        this.lvlWarningMessage.setText("");
+        this.turnOffTime.setText("Connected With Staff.");
     }
     //user defined methods ends
     /**
@@ -650,13 +703,11 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -667,16 +718,14 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lvlConnectionMsg;
     private javax.swing.JLabel lvlConnectionStatus;
+    private javax.swing.JLabel lvlWarningMessage;
+    private javax.swing.JLabel turnOffTime;
+    private javax.swing.JTextField txtConnectedTime;
     private javax.swing.JTextField txtCustomerUserName;
     private javax.swing.JLabel txtHeading;
-    private javax.swing.JTextField txtIpAddress;
+    private javax.swing.JTextField txtIcNumber;
     private javax.swing.JTextArea txtMessageFromServer;
     private javax.swing.JTextField txtMessageToServer;
-    private javax.swing.JTextField txtOperating;
-    private javax.swing.JTextField txtPort;
-    private javax.swing.JTextField txtServer;
-    private javax.swing.JTextField txtServerIpAddress;
-    private javax.swing.JTextField txtServerPort;
     private javax.swing.JTextField txtUserName;
     private javax.swing.JTextField txtUserUniqueId;
     // End of variables declaration//GEN-END:variables

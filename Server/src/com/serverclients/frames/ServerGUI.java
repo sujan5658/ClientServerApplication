@@ -635,7 +635,7 @@ public class ServerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewClientDetailsMouseClicked
 
     private void btnAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAboutMouseClicked
-        JOptionPane.showMessageDialog(null,"Server Version 1.0.0","About Server",JOptionPane.OK_OPTION,new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png")));
+        JOptionPane.showMessageDialog(null,"Server Version 2.0.0","About Server",JOptionPane.OK_OPTION,new javax.swing.ImageIcon(getClass().getResource("/com/serverclients/images/logo4.png")));
     }//GEN-LAST:event_btnAboutMouseClicked
 
     private void btnResetReportDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReportDataActionPerformed
